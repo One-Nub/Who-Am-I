@@ -1,0 +1,9 @@
+{
+    "token" : "",
+    "bot": {
+        "commands_require_mention" : true,
+        "plugins": [
+            ""
+        ]
+    }
+}
