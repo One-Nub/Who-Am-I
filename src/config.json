@@ -1,7 +1,7 @@
 {
     "token" : "",
     "bot": {
-        "commands_require_mention" : true,
+        "commands_require_mention" : false,
         "plugins": [
             "plugins.essentials"
         ]
