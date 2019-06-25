@@ -3,7 +3,7 @@
     "bot": {
         "commands_require_mention" : true,
         "plugins": [
-            ""
+            "plugins.essentials"
         ]
     }
 }
