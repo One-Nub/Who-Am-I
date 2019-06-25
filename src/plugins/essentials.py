@@ -6,12 +6,14 @@ import re
 class Boot(Plugin):
     @Plugin.listen("Ready")
     def on_ready(self, event):
+        """Updates the status of the bot when started"""
         self.client.update_presence(Status.online, Game(type = GameType.watching, #pylint: disable=no-member
          name = "people make friends!"))
 
 class PrefixHandler(Plugin):
     @Plugin.listen("MessageCreate")
     def on_message_send(self, event):
+        """Perform actions to run a command when a message is sent."""
         botAccount = event.message.author.bot
         firstWord = event.message.content.partition(" ")[0]
         prefix = self.get_prefix()
@@ -55,6 +57,9 @@ class PrefixHandler(Plugin):
 
     def get_command_triggers(self, command):
         return getattr(command, "triggers")
+
+    def get_cmd_docstring(self, command):
+        return command.get_docstring()
 
     def run_command(self, event, prefix):
         msgContent = event.message.content[len(prefix):].lstrip()
