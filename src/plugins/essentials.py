@@ -16,6 +16,7 @@ class PrefixHandler(Plugin):
         """Perform actions to run a command when a message is sent."""
         botAccount = event.message.author.bot
         firstWord = event.message.content.partition(" ")[0]
+        firstWord = firstWord.lower()
 
         prefix = self.get_prefix()
         mention = self.get_mention()
@@ -66,7 +67,7 @@ class PrefixHandler(Plugin):
     def find_group(self, firstWord):
         default = False
         for group in self.get_groups():
-            if group in firstWord:
+            if group.lower() in firstWord:
                 return True
         return default
 
@@ -91,11 +92,14 @@ class PrefixHandler(Plugin):
         restOfPartition = msgContent.partition(" ")[2]
         secondWord = restOfPartition.partition(" ")[0]
 
+        firstWord = firstWord.lower()
+        secondWord = secondWord.lower()
+
         for command in self.get_all_commands():
             for trigger in self.get_command_triggers(command):
-                if (not group) and (firstWord in trigger):
+                if (not group) and (firstWord in trigger.lower()):
                     command.execute(CommandEvent(command, event.message,
                     re.search(command.compiled_regex, msgContent)))
-                elif (group) and (secondWord in trigger):
+                elif (group) and (secondWord in trigger.lower()):
                     command.execute(CommandEvent(command, event.message,
                     re.search(command.compiled_regex, msgContent)))
