@@ -52,3 +52,8 @@ class Utilities(Plugin):
 
         infoEmbed.add_field(name = "View my github here!", value = github, inline = False)
         event.msg.reply(embed = infoEmbed)
+
+    @Plugin.command("ping", aliases = ["pong"], group = "test")
+    def on_ping_command(self, event):
+        """Responds with 'Pong!' if the bot is online"""
+        event.msg.reply("Pong!")
