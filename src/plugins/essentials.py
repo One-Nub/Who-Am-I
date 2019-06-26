@@ -16,13 +16,21 @@ class PrefixHandler(Plugin):
         """Perform actions to run a command when a message is sent."""
         botAccount = event.message.author.bot
         firstWord = event.message.content.partition(" ")[0]
+
         prefix = self.get_prefix()
         mention = self.get_mention()
 
         if (self.find_prefix(firstWord)) and not (botAccount):
-            self.run_command(event, prefix)
+            if not self.find_group(firstWord):
+                self.run_command(event, prefix)
+            else:
+                self.run_command(event, prefix, group = True)
         elif (self.find_mention(firstWord)) and not (botAccount):
-            self.run_command(event, mention)
+            if not self.find_group(firstWord):
+                self.run_command(event, mention)
+            else:
+                self.run_command(event, mention, group = True)
+
 
     def get_prefix(self):
         prefix = ">"
@@ -46,6 +54,22 @@ class PrefixHandler(Plugin):
         else:
             return False
 
+    def get_groups(self):
+        group_list = []
+        append = group_list.append
+        for command in self.get_all_commands():
+            group = getattr(command, "group")
+            if group:
+                append(group)
+        return group_list
+
+    def find_group(self, firstWord):
+        default = False
+        for group in self.get_groups():
+            if group in firstWord:
+                return True
+        return default
+
     def get_all_commands(self):
         command_list = []
         append = command_list.append
@@ -61,12 +85,17 @@ class PrefixHandler(Plugin):
     def get_cmd_docstring(self, command):
         return command.get_docstring()
 
-    def run_command(self, event, prefix):
+    def run_command(self, event, prefix, group = False):
         msgContent = event.message.content[len(prefix):].lstrip()
-        commandName = msgContent.partition(" ")[0]
+        firstWord = msgContent.partition(" ")[0]
+        restOfPartition = msgContent.partition(" ")[2]
+        secondWord = restOfPartition.partition(" ")[0]
 
         for command in self.get_all_commands():
-            for val in self.get_command_triggers(command):
-                if commandName in val:
+            for trigger in self.get_command_triggers(command):
+                if (not group) and (firstWord in trigger):
                     command.execute(CommandEvent(command, event.message,
-                     re.search(command.compiled_regex, msgContent)))
+                    re.search(command.compiled_regex, msgContent)))
+                elif (group) and (secondWord in trigger):
+                    command.execute(CommandEvent(command, event.message,
+                    re.search(command.compiled_regex, msgContent)))
