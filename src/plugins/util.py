@@ -3,7 +3,7 @@ from disco.types.message import MessageEmbed
 from datetime import datetime
 
 class Utilities(Plugin):
-    @Plugin.command("help", aliases = ["temp"])
+    @Plugin.command("help")
     def on_help_command(self, event):
         """Displays a list of my commands and what they do."""
         helpEmbed = MessageEmbed()
