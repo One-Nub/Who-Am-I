@@ -19,6 +19,8 @@ class Utilities(Plugin):
                 for command in plugin.commands:
                     name = command.name
                     desc = PrefixHandler.get_cmd_docstring(command)
+                    if desc is '':
+                        desc = "No docstring was found."
                     commandFormat += "`{0}` ➙ `{1}` \n".format(name, desc)
                 helpEmbed.add_field(name = plugin.name, value = commandFormat, inline = False)
         event.msg.reply(embed = helpEmbed)
