@@ -1,1 +1,2 @@
 disco-py==0.0.12
+mysql-connector-python~=8.0.16
