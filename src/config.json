@@ -6,13 +6,15 @@
         "plugins": [
             "plugins.essentials",
             "plugins.util",
-            "plugins.main_cmds"
+            "plugins.main_cmds",
+            "db"
         ]
     },
     "db_creds" : {
         "db_user" : "",
         "db_pass" : "",
         "db_host" : "",
-        "db_database" : ""
+        "db_database" : "",
+        "db_port" : ""
     }
 }

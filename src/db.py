@@ -7,6 +7,7 @@ class DB_CREDS:
     password = ""
     address = ""
     database = ""
+    port = ""
 
     def __init__(self):
         with open("config.json") as config_file:
@@ -20,6 +21,8 @@ class DB_CREDS:
                     self.address = value
                 elif key == "db_database":
                     self.database = value
+                elif key == "db_port":
+                    self.port = value
 
     def get_name(self):
         return self.name
@@ -45,10 +48,16 @@ class DB_CREDS:
     def set_db(self, db):
         self.database = db
 
+    def get_port(self):
+        return self.port
+
+    def set_port(self, port):
+        self.port = port
+
 class mariadb_funcs(Plugin):
     dbclass = DB_CREDS()
     connection = mariadb.connect(user = dbclass.get_name(), password = dbclass.get_pass(),
-    host = dbclass.get_host(), database = dbclass.get_db())
+    host = dbclass.get_host(), database = dbclass.get_db(), port = dbclass.get_port())
 
     def update_server_table(self, serverID, prefix):
         pass
