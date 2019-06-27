@@ -1,7 +1,9 @@
 from disco.bot import Plugin
 from disco.bot.command import Command, CommandEvent
 from disco.types.user import Game, GameType, Status
+from disco.util.chains import Chainable
 import re
+import gevent
 
 class Boot(Plugin):
     @Plugin.listen("Ready")
@@ -103,3 +105,33 @@ class PrefixHandler(Plugin):
                 elif (group) and (secondWord == trigger.lower()):
                     command.execute(CommandEvent(command, event.message,
                     re.search(command.compiled_regex, msgContent)))
+
+    def get_user_response(self, event):
+        nextmsg = self.wait_for_event("MessageCreate")
+        while nextmsg.get().author.id != event.author.id:
+            nextmsg = self.wait_for_event("MessageCreate")
+        return nextmsg.get().content.lower()
+
+    def prompt_for_arg(self, event, timeLimit, choices = None):
+        if choices:
+            botprompt = event.msg.reply("Please choose one of these options to configure!\n" + choices)
+        else:
+            botprompt = event.msg.reply("Please input what you want this field to be here!")
+
+        try:
+            with gevent.Timeout(timeLimit, TimeoutError):
+                response = self.get_user_response(event)
+                Chainable.chain(botprompt, response) #I honestly can't tell if this "Chainable" thing works or not
+                    #It's supposed to run those objects in order one by one rather than in sync.
+        except TimeoutError:
+            event.msg.reply("Timeout limit of `{0} seconds` reached, prompt cancelled.".format(timeLimit))
+            return "timeout"
+
+        if choices:
+            if response in choices:
+                return response
+            else:
+                event.msg.reply("That option was invalid, please choose a correct value!")
+                return None
+        else:
+            return response
