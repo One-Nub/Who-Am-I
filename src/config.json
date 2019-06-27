@@ -8,5 +8,11 @@
             "plugins.util",
             "plugins.main_cmds"
         ]
+    },
+    "db_creds" : {
+        "db_user" : "",
+        "db_pass" : "",
+        "db_host" : "",
+        "db_database" : ""
     }
 }
