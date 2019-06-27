@@ -1,6 +1,7 @@
 {
     "token" : "",
     "bot": {
+        "commands_prefix" : null,
         "commands_require_mention" : false,
         "plugins": [
             "plugins.essentials",
