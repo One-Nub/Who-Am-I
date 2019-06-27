@@ -10,40 +10,48 @@ class Main(Plugin):
         print("wip")
 
     @Plugin.command("adjustprofile", parser = True)
-    @Plugin.add_argument("setting", type = str.lower, choices = ["callme", "gobyname", "description", "blurb",
+    @Plugin.add_argument("setting", type = str.lower, choices = ["callme", "blurb",
        "timezone", "facts"], nargs = "?")
     def on_adjprf_command(self, event, args):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         timeLimit = 30
         choices = ("`callme`, `blurb`, `timezone`, `facts`, `cancel`")
 
-        print(args.setting)
         while args.setting is None:
             args.setting = PrefixHandler.prompt_for_arg(event, timeLimit, choices = choices)
-
-        if args.setting in "timeout":
-            pass
-        elif args.setting in "cancel":
+        if args.setting == "timeout":
+            print("timeout")
+        elif args.setting == "cancel":
             event.msg.reply("**Prompt cancelled.**")
-        elif args.setting in ("callme" or "gobyname"):
+        elif args.setting == ("callme"):
             self.on_callme_setting(event)
-        elif args.setting in ("description" or "blurb"):
+        elif args.setting == ("blurb"):
             self.on_blurb_setting(event)
-        elif args.setting in ("timezone"):
+        elif args.setting == ("timezone"):
             self.on_timezone_setting(event)
-        elif args.setting in ("facts"):
+        elif args.setting == ("facts"):
             self.on_facts_setting(event)
 
     def on_callme_setting(self, event):
-        print('callme triggered')
+        PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60)
+        if response != "cancel":
+            event.msg.reply(response)
 
     def on_blurb_setting(self, event):
-        print('blurb triggered')
+        PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200)
+        if response != "cancel":
+            event.msg.reply(response)
 
     def on_timezone_setting(self, event):
-        print('timezone triggered')
+        PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60)
+        if response != "cancel":
+            event.msg.reply(response)
 
     def on_facts_setting(self, event):
-        print("facts triggered")
-
-
+        PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200)
+        if response != "cancel":
+            event.msg.reply(response)
