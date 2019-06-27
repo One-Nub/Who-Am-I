@@ -7,12 +7,15 @@ class Main(Plugin):
     @Plugin.command("profile", aliases = ["whois"], parser = True)
     @Plugin.add_argument("userID", type = str, nargs = "?")
     def on_profile_command(self, event):
+        """(wip) Displays your profile for the world to see!"""
         print("wip")
+
 
     @Plugin.command("adjustprofile", parser = True)
     @Plugin.add_argument("setting", type = str.lower, choices = ["callme", "blurb",
        "timezone", "facts"], nargs = "?")
     def on_adjprf_command(self, event, args):
+        """Change any of the settings on your profile!"""
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         timeLimit = 30
         choices = ("`callme`, `blurb`, `timezone`, `facts`, `cancel`")
