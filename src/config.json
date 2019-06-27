@@ -5,7 +5,8 @@
         "commands_require_mention" : false,
         "plugins": [
             "plugins.essentials",
-            "plugins.util"
+            "plugins.util",
+            "plugins.main_cmds"
         ]
     }
 }
