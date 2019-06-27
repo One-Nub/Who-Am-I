@@ -8,7 +8,10 @@ class Utilities(Plugin):
         """Displays a list of my commands and what they do."""
         helpEmbed = MessageEmbed()
         helpEmbed.title = "**Need some help?**"
-        helpEmbed.description = "Find me on github: https://github.com/One-Nub/Who-Am-I"
+        helpEmbed.description = ("Find me on github: https://github.com/One-Nub/Who-Am-I \n\n"
+            "Commands with () are part of a command group, the parenthesis are not required "
+            "but the text inside them is. (e.g. \"!adjustprofile callme\" "
+            "and **not** \"!(adjustprofile) callme\")")
         helpEmbed.timestamp = datetime.utcnow().isoformat()
         helpEmbed.color = 0x8DD0E1
 
@@ -19,9 +22,13 @@ class Utilities(Plugin):
                 for command in plugin.commands:
                     name = command.name
                     desc = PrefixHandler.get_cmd_docstring(command)
+                    group = getattr(command, "group")
                     if desc is '':
                         desc = "No docstring was found."
-                    commandFormat += "`{0}` ➙ `{1}` \n".format(name, desc)
+                    if group:
+                        commandFormat += "`({0}) {1}` ➙ `{2}` \n".format(group, name, desc)
+                    else:
+                        commandFormat += "`{0}` ➙ `{1}` \n".format(name, desc)
                 helpEmbed.add_field(name = plugin.name, value = commandFormat, inline = False)
         event.msg.reply(embed = helpEmbed)
 
