@@ -1,7 +1,7 @@
 {
     "token" : "",
     "bot": {
-        "commands_prefix" : null,
+        "commands_prefix" : "Ra@n60M5tR1nG",
         "commands_require_mention" : false,
         "plugins": [
             "plugins.essentials",
