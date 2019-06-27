@@ -2,7 +2,6 @@ from disco.bot import Plugin
 from disco.types.message import MessageEmbed
 from datetime import datetime
 from disco.util.chains import Chainable
-import gevent
 
 class Main(Plugin):
     @Plugin.command("profile", aliases = ["whois"], parser = True)
