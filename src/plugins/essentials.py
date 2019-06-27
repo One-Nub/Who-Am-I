@@ -110,13 +110,15 @@ class PrefixHandler(Plugin):
         nextmsg = self.wait_for_event("MessageCreate")
         while nextmsg.get().author.id != event.author.id:
             nextmsg = self.wait_for_event("MessageCreate")
-        return nextmsg.get().content.lower()
+        return nextmsg.get().content
 
     def prompt_for_arg(self, event, timeLimit, choices = None):
         if choices:
             botprompt = event.msg.reply("Please choose one of these options to configure!\n" + choices)
+                #I will replace these prompts with embeds if I have time.
         else:
             botprompt = event.msg.reply("Please input what you want this field to be!")
+                #This I can either keep generic, or customize it before the call in the other files.
 
         try:
             with gevent.Timeout(timeLimit, TimeoutError):
@@ -128,10 +130,15 @@ class PrefixHandler(Plugin):
             return "timeout"
 
         if choices:
-            if response in choices:
-                return response
+            if response.lower() in choices:
+                return response.lower()
             else:
                 event.msg.reply("That option was invalid, please choose a correct value!")
                 return None
         else:
-            return response
+            lowerResponse = response.strip()
+            if lowerResponse.lower() == "cancel":
+                event.msg.reply("**Prompt cancelled.**")
+                return "cancel"
+            else:
+                return response
