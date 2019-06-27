@@ -116,7 +116,7 @@ class PrefixHandler(Plugin):
         if choices:
             botprompt = event.msg.reply("Please choose one of these options to configure!\n" + choices)
         else:
-            botprompt = event.msg.reply("Please input what you want this field to be here!")
+            botprompt = event.msg.reply("Please input what you want this field to be!")
 
         try:
             with gevent.Timeout(timeLimit, TimeoutError):
