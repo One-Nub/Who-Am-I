@@ -39,7 +39,7 @@ class PrefixHandler(Plugin):
 
     def find_prefix(self, firstWord):
         prefix = self.get_prefix()
-        if prefix in firstWord[:len(prefix)]:
+        if prefix == firstWord[:len(prefix)]:
             return True
         else:
             return False
@@ -50,7 +50,7 @@ class PrefixHandler(Plugin):
 
     def find_mention(self, firstWord):
         mention = self.get_mention()
-        if mention in firstWord:
+        if mention == firstWord:
             return True
         else:
             return False
@@ -67,7 +67,7 @@ class PrefixHandler(Plugin):
     def find_group(self, firstWord):
         default = False
         for group in self.get_groups():
-            if group.lower() in firstWord:
+            if group.lower() == firstWord:
                 return True
         return default
 
@@ -97,9 +97,9 @@ class PrefixHandler(Plugin):
 
         for command in self.get_all_commands():
             for trigger in self.get_command_triggers(command):
-                if (not group) and (firstWord in trigger.lower()):
+                if (not group) and (firstWord == trigger.lower()):
                     command.execute(CommandEvent(command, event.message,
                     re.search(command.compiled_regex, msgContent)))
-                elif (group) and (secondWord in trigger.lower()):
+                elif (group) and (secondWord == trigger.lower()):
                     command.execute(CommandEvent(command, event.message,
                     re.search(command.compiled_regex, msgContent)))
