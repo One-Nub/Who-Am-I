@@ -5,6 +5,8 @@ __Who Am I__ is a discord bot meant to make sharing info about yourself easier t
 # Invite me!
 [Invite URL](https://discordapp.com/oauth2/authorize?client_id=592796597209792542&permissions=380096&scope=bot)
 
+The default prefix is `wai!` or you can mention the bot.
+
 ## Installation
 
 All configuration values will be found in [config.json](https://github.com/One-Nub/Who-Am-I/blob/master/src/config.json) allowing the self hoster (you!) to just configure those values & away you go.
