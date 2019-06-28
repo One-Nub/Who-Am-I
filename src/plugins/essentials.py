@@ -29,7 +29,8 @@ class PrefixHandler(Plugin):
         firstWord = event.message.content.partition(" ")[0]
         firstWord = firstWord.lower()
 
-        prefix = self.get_prefix(event.guild.id)
+        self.prefix = self.get_prefix(event.guild.id)
+        prefix = self.prefix
         mention = self.get_mention()
 
         if not event.channel.is_dm:
