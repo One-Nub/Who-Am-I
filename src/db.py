@@ -124,7 +124,7 @@ class mariadb_funcs(Plugin):
         cursor = self.connection.cursor()
 
         try:
-            cursor.execute("""UPDATE LOW_PRIORITY server_settings SET prefix = %s
+            cursor.execute("""UPDATE server_settings SET prefix = %s
             WHERE server_id = %s""", (prefix, serverID))
 
             self.connection.commit()
@@ -180,16 +180,16 @@ class mariadb_funcs(Plugin):
 
         try:
             if option == 'call_me':
-                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET call_me = %s
+                cursor.execute("""UPDATE user_settings SET call_me = %s
                 WHERE user_id = %s""", (content, userID))
             elif option == 'usr_desc':
-                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET usr_desc = %s
+                cursor.execute("""UPDATE user_settings SET usr_desc = %s
                 WHERE user_id = %s""", (content, userID))
             elif option == 'timezone':
-                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET timezone = %s
+                cursor.execute("""UPDATE user_settings SET timezone = %s
                 WHERE user_id = %s""", (content, userID))
             elif option == "facts":
-                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET facts = %s
+                cursor.execute("""UPDATE user_settings SET facts = %s
                 WHERE user_id = %s""", (content, userID))
 
             self.connection.commit()
