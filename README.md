@@ -11,6 +11,8 @@ All configuration values will be found in [config.json](https://github.com/One-N
 
 The MariaDB user requires CREATE, INSERT, SELECT, and UPDATE.
 
+Run it with main.py in /src
+
 ## Requirements
 
 This requires [Python 3.6](https://www.python.org/downloads/release/python-368/) to be able to run as well as a [MariaDB](https://mariadb.org/) database.
