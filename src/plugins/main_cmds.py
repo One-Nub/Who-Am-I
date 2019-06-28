@@ -2,6 +2,7 @@ from disco.bot import Plugin
 from disco.types.message import MessageEmbed
 from datetime import datetime
 from disco.util.chains import Chainable
+from disco.types.base import UNSET
 import re
 import random
 
@@ -26,8 +27,13 @@ class Main(Plugin):
             userTimezone = usrSettings[3]
             userIntFacts = usrSettings[4]
 
+            if userObj.presence is not UNSET:
+                usrState =  userObj.presence.status
+            else:
+    	        usrState = "offline"
+
             profileEmbed = MessageEmbed()
-            profileEmbed.title = "The **amazing** profile of {0}#{1}!".format(userObj.username, userObj.discriminator)
+            profileEmbed.title = "The amazing profile of {0}#{1} who is currently **{2}**!".format(userObj.username, userObj.discriminator, usrState)
             profileEmbed.set_thumbnail(url = userPFPLink)
 
             color = random.randint(0, 0xFFFFFF)
