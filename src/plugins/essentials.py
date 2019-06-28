@@ -124,18 +124,18 @@ class PrefixHandler(Plugin):
             nextmsg = self.wait_for_event("MessageCreate")
         return nextmsg.get().content
 
-    def prompt_for_arg(self, event, timeLimit, choices = None):
+    def prompt_for_arg(self, event, timeLimit, choices = None, fieldName = None):
         if choices:
             argsEmbed = MessageEmbed()
             argsEmbed.title = "Choices, choices..."
-            argsEmbed.description = "**Please choose one of these options to configure!**\n\n{}".format(choices)
+            argsEmbed.description = "**Please response with one of these options!**\n\n{}".format(choices)
             argsEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(timeLimit))
             argsEmbed.color = 0x8DD0E1
             botprompt = event.msg.reply(embed = argsEmbed)
         else:
             promptEmbed = MessageEmbed()
-            promptEmbed.title = "Please input now what you want this field to be!"
-            promptEmbed.description = "Or say **`cancel`** if you changed your mind."
+            promptEmbed.title = "Please input now what you want your **{}** field to be!".format(fieldName)
+            promptEmbed.description = "Or say **`cancel`** if you changed your mind. (It will just cancel this option)"
             promptEmbed.color = 0x8DD0E1
             promptEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(timeLimit))
             botprompt = event.msg.reply(embed = promptEmbed)
