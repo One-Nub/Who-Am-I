@@ -57,12 +57,12 @@ class DB_CREDS:
 class mariadb_funcs(Plugin):
     dbclass = DB_CREDS()
     connection = mariadb.connect(user = dbclass.get_name(), password = dbclass.get_pass(),
-    host = dbclass.get_host(), database = dbclass.get_db(), port = dbclass.get_port())
+        host = dbclass.get_host(), database = dbclass.get_db(), port = dbclass.get_port())
 
     def update_server_table(self, serverID, prefix):
         pass
 
-    def get_user(self, userID):
+    def make_user(self, userID):
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM user_settings WHERE user_id=%s", (userID,))
         row = cursor.fetchone()
@@ -80,11 +80,31 @@ class mariadb_funcs(Plugin):
         cursor.close()
         return row
 
-    def update_user_setting(self, userID, option):
-        row = self.get_user(userID)
+    def update_user_setting(self, userID, option, content):
+        row = self.make_user(userID)
         print(row)
-        #cursor = self.connection.cursor()
+        cursor = self.connection.cursor()
+
+        try:
+            if option == 'call_me':
+                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET call_me = %s
+                WHERE user_id = %s""", (content, userID))
+            elif option == 'usr_desc':
+                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET usr_desc = %s
+                WHERE user_id = %s""", (content, userID))
+            elif option == 'timezone':
+                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET timezone = %s
+                WHERE user_id = %s""", (content, userID))
+            elif option == "facts":
+                cursor.execute("""UPDATE LOW_PRIORITY user_settings SET facts = %s
+                WHERE user_id = %s""", (content, userID))
+
+            self.connection.commit()
+            cursor.close()
+            return True
+        except mariadb.Error as error:
+            errorStr = "Error: {}".format(error)
+            print(errorStr)
+            cursor.close()
+            return errorStr
         #Option has to be: call_me, usr_desc, timezone, facts (associates to columns in database)
-        #try:
-        #    cursor.execute
-        #pass

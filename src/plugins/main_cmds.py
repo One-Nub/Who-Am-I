@@ -18,7 +18,11 @@ class Main(Plugin):
         """Change any of the settings on your profile!"""
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         timeLimit = 30
-        choices = ("`callme`, `blurb`, `timezone`, `facts`, `cancel`")
+        choices = ("`callme` - Change the name the bot displays that you go by.\n"
+            "`blurb` - Change your profile's description.\n"
+            "`timezone` - Change your timezone\n"
+            "`facts` - Change the interesting fact(s) on your profile.\n"
+            "`cancel` - Cancel this prompt.")
 
         while args.setting is None:
             args.setting = PrefixHandler.prompt_for_arg(event, timeLimit, choices = choices)
@@ -37,24 +41,49 @@ class Main(Plugin):
 
     def on_callme_setting(self, event):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        MariaDB = self.bot.plugins.get("mariadb_funcs")
+
         response = PrefixHandler.prompt_for_arg(event, timeLimit = 60)
         if response != "cancel":
-            event.msg.reply(response)
+            changeSetting = MariaDB.update_user_setting(event.author.id, 'call_me', response)
+            if changeSetting == True:
+                event.msg.reply("Your go by name has been updated!")
+            else:
+                event.msg.reply(changeSetting)
 
     def on_blurb_setting(self, event):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        MariaDB = self.bot.plugins.get("mariadb_funcs")
+
         response = PrefixHandler.prompt_for_arg(event, timeLimit = 200)
         if response != "cancel":
-            event.msg.reply(response)
+            changeSetting = MariaDB.update_user_setting(event.author.id, 'usr_desc', response)
+            if changeSetting == True:
+                event.msg.reply("Your profile description has been updated!")
+            else:
+                event.msg.reply(changeSetting)
 
     def on_timezone_setting(self, event):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        MariaDB = self.bot.plugins.get("mariadb_funcs")
+
         response = PrefixHandler.prompt_for_arg(event, timeLimit = 60)
         if response != "cancel":
-            event.msg.reply(response)
+            changeSetting = MariaDB.update_user_setting(event.author.id, 'timezone', response)
+            if changeSetting == True:
+                event.msg.reply("Your timezone has been updated!")
+            else:
+                event.msg.reply(changeSetting)
 
     def on_facts_setting(self, event):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        MariaDB = self.bot.plugins.get("mariadb_funcs")
+
         response = PrefixHandler.prompt_for_arg(event, timeLimit = 200)
         if response != "cancel":
-            event.msg.reply(response)
+            changeSetting = MariaDB.update_user_setting(event.author.id, 'facts', response)
+            if changeSetting == True:
+                event.msg.reply("Your interesting fact has been updated!")
+            else:
+                event.msg.reply(changeSetting)
+
