@@ -24,16 +24,17 @@ class PrefixHandler(Plugin):
         prefix = self.get_prefix()
         mention = self.get_mention()
 
-        if (self.find_prefix(firstWord)) and not (botAccount):
-            if not self.find_group(firstWord):
-                self.run_command(event, prefix)
-            else:
-                self.run_command(event, prefix, group = True)
-        elif (self.find_mention(firstWord)) and not (botAccount):
-            if not self.find_group(firstWord):
-                self.run_command(event, mention)
-            else:
-                self.run_command(event, mention, group = True)
+        if not event.channel.is_dm:
+            if (self.find_prefix(firstWord)) and not (botAccount):
+                if not self.find_group(firstWord):
+                    self.run_command(event, prefix)
+                else:
+                    self.run_command(event, prefix, group = True)
+            elif (self.find_mention(firstWord)) and not (botAccount):
+                if not self.find_group(firstWord):
+                    self.run_command(event, mention)
+                else:
+                    self.run_command(event, mention, group = True)
 
 
     def get_prefix(self):
