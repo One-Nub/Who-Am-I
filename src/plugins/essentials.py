@@ -29,11 +29,11 @@ class PrefixHandler(Plugin):
         firstWord = event.message.content.partition(" ")[0]
         firstWord = firstWord.lower()
 
-        prefix = self.get_prefix(event)
+        prefix = self.get_prefix(event.guild.id)
         mention = self.get_mention()
 
         if not event.channel.is_dm:
-            if (self.find_prefix(firstWord, event)) and not (botAccount):
+            if (self.find_prefix(firstWord)) and not (botAccount):
                 if not self.find_group(firstWord):
                     self.run_command(event, prefix)
                 else:
@@ -45,12 +45,12 @@ class PrefixHandler(Plugin):
                     self.run_command(event, mention, group = True)
 
 
-    def get_prefix(self, event):
+    def get_prefix(self, serverID):
         mariadb = self.bot.plugins.get("mariadb_funcs")
-        prefix = mariadb.get_server_prefix(event.guild.id)
+        prefix = mariadb.get_server_prefix(serverID)
         return prefix
 
-    def find_prefix(self, firstWord, event):
+    def find_prefix(self, firstWord):
         prefix = self.prefix
         if prefix == firstWord[:len(prefix)]:
             return True
