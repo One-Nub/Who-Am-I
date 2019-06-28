@@ -134,7 +134,7 @@ class PrefixHandler(Plugin):
             botprompt = event.msg.reply(embed = argsEmbed)
         else:
             promptEmbed = MessageEmbed()
-            promptEmbed.title = "Please input now what you want your **{}** field to be!".format(fieldName)
+            promptEmbed.title = "Please input now what you want your **{}** to be!".format(fieldName)
             promptEmbed.description = "Or say **`cancel`** if you changed your mind. (It will just cancel this option)"
             promptEmbed.color = 0x8DD0E1
             promptEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(timeLimit))
