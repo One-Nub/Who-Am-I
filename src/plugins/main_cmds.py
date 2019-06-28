@@ -1,10 +1,10 @@
 from disco.bot import Plugin
 from disco.types.message import MessageEmbed
 from datetime import datetime
-from disco.util.chains import Chainable
 from disco.types.base import UNSET
 import re
 import random
+import gevent
 
 class Main(Plugin):
     @Plugin.command("profile", aliases = ["whois"], parser = True)
@@ -57,8 +57,31 @@ class Main(Plugin):
             event.msg.reply(embed = profileEmbed)
 
         else:
-            event.msg.reply("This user does not have a profile! Maybe they should make one by changing their settings :eyes:")
+            event.msg.reply(":no_good: This user does not have a profile! They can make one by running `@Who Am I#1225 setup`")
 
+    @Plugin.command("setup")
+    def on_setup_commmand(self, event):
+        """Create and set all your profile options in one easy prompt!"""
+        PrefixHandler = self.bot.plugins.get("PrefixHandler")
+        promptSetup = MessageEmbed()
+        promptSetup.title = "Make your profile!"
+        promptSetup.description = """Welcome to the setup prompt for the Who Am I bot!\n
+         This will lead you through the essential setup of your profile!\n
+         Please say `yes` if you are ready to continue, or `no` if you changed your mind.
+         Say **cancel** on any prompt to skip that prompt."""
+        promptSetup.color = 0x8DD0E1
+
+        event.msg.reply(embed = promptSetup)
+        confirmation = PrefixHandler.prompt_for_arg(event, timeLimit = 15, choices = ("`yes` or `no`"))
+        if confirmation == "yes":
+            event.msg.reply("Starting setup now...")
+            gevent.sleep(3)
+            self.on_callme_setting(event)
+            self.on_blurb_setting(event)
+            self.on_timezone_setting(event)
+            self.on_facts_setting(event)
+        elif confirmation == "no":
+            event.msg.reply("**Setup cancelled.**")
 
     @Plugin.command("adjustprofile", parser = True)
     @Plugin.add_argument("setting", type = str.lower, choices = ["callme", "blurb",
@@ -92,7 +115,7 @@ class Main(Plugin):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         MariaDB = self.bot.plugins.get("mariadb_funcs")
 
-        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60)
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60, fieldName = "call me")
         if response != "cancel":
             changeSetting = MariaDB.update_user_setting(event.author.id, 'call_me', response)
             if changeSetting == True:
@@ -104,7 +127,7 @@ class Main(Plugin):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         MariaDB = self.bot.plugins.get("mariadb_funcs")
 
-        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200)
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200, fieldName = "blurb/description")
         if response != "cancel":
             changeSetting = MariaDB.update_user_setting(event.author.id, 'usr_desc', response)
             if changeSetting == True:
@@ -116,7 +139,7 @@ class Main(Plugin):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         MariaDB = self.bot.plugins.get("mariadb_funcs")
 
-        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60)
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60, fieldName = "timezone")
         if response != "cancel":
             changeSetting = MariaDB.update_user_setting(event.author.id, 'timezone', response)
             if changeSetting == True:
@@ -128,7 +151,7 @@ class Main(Plugin):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         MariaDB = self.bot.plugins.get("mariadb_funcs")
 
-        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200)
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200, fieldName = "interesting facts")
         if response != "cancel":
             changeSetting = MariaDB.update_user_setting(event.author.id, 'facts', response)
             if changeSetting == True:
