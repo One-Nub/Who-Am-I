@@ -7,6 +7,7 @@
             "plugins.essentials",
             "plugins.util",
             "plugins.main_cmds",
+            "plugins.administration",
             "db"
         ]
     },
@@ -15,6 +16,6 @@
         "db_pass" : "",
         "db_host" : "",
         "db_database" : "",
-        "db_port" : ""
+        "db_port" : 3306
     }
 }
