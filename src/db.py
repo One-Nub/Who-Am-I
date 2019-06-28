@@ -62,6 +62,13 @@ class mariadb_funcs(Plugin):
     def update_server_table(self, serverID, prefix):
         pass
 
+    def get_user(self, userID):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM user_settings WHERE user_id=%s", (userID,))
+        user = cursor.fetchone()
+        cursor.close()
+        return user
+
     def make_user(self, userID):
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM user_settings WHERE user_id=%s", (userID,))
