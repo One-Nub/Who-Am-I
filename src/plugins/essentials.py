@@ -2,6 +2,7 @@ from disco.bot import Plugin
 from disco.bot.command import Command, CommandEvent
 from disco.types.user import Game, GameType, Status
 from disco.util.chains import Chainable
+from disco.types.message import MessageEmbed
 import re
 import gevent
 
@@ -114,10 +115,19 @@ class PrefixHandler(Plugin):
 
     def prompt_for_arg(self, event, timeLimit, choices = None):
         if choices:
-            botprompt = event.msg.reply("Please choose one of these options to configure!\n" + choices)
-                #I will replace these prompts with embeds if I have time.
+            argsEmbed = MessageEmbed()
+            argsEmbed.title = "Choices, choices..."
+            argsEmbed.description = "**Please choose one of these options to configure!**\n\n{}".format(choices)
+            argsEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(timeLimit))
+            argsEmbed.color = 0x8DD0E1
+            botprompt = event.msg.reply(embed = argsEmbed)
         else:
-            botprompt = event.msg.reply("Please input what you want this field to be!")
+            promptEmbed = MessageEmbed()
+            promptEmbed.title = "Please input now what you want this field to be!"
+            promptEmbed.description = "Or say **`cancel`** if you changed your mind."
+            promptEmbed.color = 0x8DD0E1
+            promptEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(timeLimit))
+            botprompt = event.msg.reply(embed = promptEmbed)
                 #This I can either keep generic, or customize it before the call in the other files.
 
         try:
