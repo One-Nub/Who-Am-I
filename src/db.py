@@ -137,7 +137,7 @@ class mariadb_funcs(Plugin):
 
     def get_user_settings(self, userID):
         userConfig = []
-        append = userConfig.append()
+        append = userConfig.append
         self.confirm_tables_exist()
         cursor = self.connection.cursor()
         cursor.execute("""SELECT * FROM user_settings WHERE user_id=%s""", (userID,))
@@ -145,6 +145,16 @@ class mariadb_funcs(Plugin):
             append(value)
         cursor.close()
         return userConfig
+
+    def check_user_exists(self, userID):
+        self.confirm_tables_exist()
+        cursor = self.connection.cursor()
+        cursor.execute("""SELECT * FROM user_settings WHERE user_id = %s""", (userID,))
+        existance = cursor.fetchone()
+        if existance:
+            return True
+        else:
+            return False
 
     def make_user(self, userID):
         self.confirm_tables_exist()
