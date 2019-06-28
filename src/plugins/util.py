@@ -12,6 +12,9 @@ class Utilities(Plugin):
             "Commands with () are part of a command group, the parenthesis are not required "
             "but the text inside them is. (e.g. \"!adjustprofile callme\" "
             "and **not** \"!(adjustprofile) callme\")")
+
+        mariadb = self.bot.plugins.get("mariadb_funcs")
+        helpEmbed.add_field(name = "Your prefix is: `{}`".format(mariadb.get_server_prefix(event.guild.id)), value = "\u200b", inline = False)
         helpEmbed.timestamp = datetime.utcnow().isoformat()
         helpEmbed.color = 0x8DD0E1
 
@@ -61,7 +64,7 @@ class Utilities(Plugin):
             inline = False)
 
         infoEmbed.add_field(name = "View my github here!", value = github, inline = False)
-        infoEmbed.add_field(name = "Invite me here!", value = botInvite, inline = False)
+        infoEmbed.add_field(name = "Invite me here!", value = "[Invite me!]({})".format(botInvite), inline = False)
         event.msg.reply(embed = infoEmbed)
 
     @Plugin.command("ping", aliases = ["pong"])
