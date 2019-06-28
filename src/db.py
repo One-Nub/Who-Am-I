@@ -59,29 +59,51 @@ class mariadb_funcs(Plugin):
     connection = mariadb.connect(user = dbclass.get_name(), password = dbclass.get_pass(),
         host = dbclass.get_host(), database = dbclass.get_db(), port = dbclass.get_port())
 
+    def confirm_tables_exist(self):
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("""CREATE TABLE IF NOT EXISTS user_settings (
+                user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+                call_me VARCHAR(50),
+                usr_desc VARCHAR(1000),
+                timezone VARCHAR(25),
+                facts VARCHAR(250))""")
+
+            cursor.execute("""CREATE TABLE IF NOT EXISTS server_settings (
+                server_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+                prefix VARCHAR(15) DEFAULT 'wai!')""")
+
+            self.connection.commit()
+        except mariadb.Error:
+            print(mariadb.Error)
+
+        cursor.close()
+
     def update_server_table(self, serverID, prefix):
         pass
 
     def get_user(self, userID):
+        self.confirm_tables_exist()
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM user_settings WHERE user_id=%s", (userID,))
+        cursor.execute("""SELECT * FROM user_settings WHERE user_id=%s""", (userID,))
         user = cursor.fetchone()
         cursor.close()
         return user
 
     def make_user(self, userID):
+        self.confirm_tables_exist()
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM user_settings WHERE user_id=%s", (userID,))
+        cursor.execute("""SELECT * FROM user_settings WHERE user_id=%s""", (userID,))
         row = cursor.fetchone()
         if row is None:
             try:
-                cursor.execute("INSERT INTO user_settings (user_id) VALUES (%s)", (userID,))
+                cursor.execute("""INSERT INTO user_settings (user_id) VALUES (%s)""", (userID,))
                 self.connection.commit()
                 print("new user added: {}".format(userID))
             except mariadb.Error as error:
                 print("New user insert error: {}".format(error))
 
-            cursor.execute("SELECT * FROM user_settings WHERE user_id=%s", (userID,))
+            cursor.execute("""SELECT * FROM user_settings WHERE user_id=%s""", (userID,))
             row = cursor.fetchone()
 
         cursor.close()
