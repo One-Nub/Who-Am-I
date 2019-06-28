@@ -39,6 +39,7 @@ class Utilities(Plugin):
         github = "https://github.com/One-Nub/Who-Am-I"
         myPfpImg = "https://i.lensdump.com/i/WDsOXb.png"
         botPfpImg = "https://i.lensdump.com/i/WDs4G5.png"
+        botInvite = "https://discordapp.com/api/oauth2/authorize?client_id=592796597209792542&permissions=380096&scope=bot"
 
         infoEmbed.title = "Welcome to **Who Am I**!"
         infoEmbed.url = github
@@ -60,6 +61,7 @@ class Utilities(Plugin):
             inline = False)
 
         infoEmbed.add_field(name = "View my github here!", value = github, inline = False)
+        infoEmbed.add_field(name = "Invite me here!", value = botInvite, inline = False)
         event.msg.reply(embed = infoEmbed)
 
     @Plugin.command("ping", aliases = ["pong"])
