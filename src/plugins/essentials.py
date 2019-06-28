@@ -13,7 +13,15 @@ class Boot(Plugin):
         self.client.update_presence(Status.online, Game(type = GameType.watching, #pylint: disable=no-member
          name = "people make friends!"))
 
+    @Plugin.listen("GuildCreate")
+    def on_guild_join(self, event):
+        mariadb = self.bot.plugins.get("mariadb_funcs")
+        if not mariadb.check_guild_exists(event.guild.id):
+            mariadb.make_server(event.guild.id)
+
+
 class PrefixHandler(Plugin):
+    prefix = ""
     @Plugin.listen("MessageCreate")
     def on_message_send(self, event):
         """Perform actions to run a command when a message is sent."""
@@ -21,11 +29,11 @@ class PrefixHandler(Plugin):
         firstWord = event.message.content.partition(" ")[0]
         firstWord = firstWord.lower()
 
-        prefix = self.get_prefix()
+        prefix = self.get_prefix(event)
         mention = self.get_mention()
 
         if not event.channel.is_dm:
-            if (self.find_prefix(firstWord)) and not (botAccount):
+            if (self.find_prefix(firstWord, event)) and not (botAccount):
                 if not self.find_group(firstWord):
                     self.run_command(event, prefix)
                 else:
@@ -37,12 +45,13 @@ class PrefixHandler(Plugin):
                     self.run_command(event, mention, group = True)
 
 
-    def get_prefix(self):
-        prefix = ">"
+    def get_prefix(self, event):
+        mariadb = self.bot.plugins.get("mariadb_funcs")
+        prefix = mariadb.get_server_prefix(event.guild.id)
         return prefix
 
-    def find_prefix(self, firstWord):
-        prefix = self.get_prefix()
+    def find_prefix(self, firstWord, event):
+        prefix = self.prefix
         if prefix == firstWord[:len(prefix)]:
             return True
         else:

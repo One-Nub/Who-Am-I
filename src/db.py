@@ -74,21 +74,77 @@ class mariadb_funcs(Plugin):
                 prefix VARCHAR(15) DEFAULT 'wai!')""")
 
             self.connection.commit()
-        except mariadb.Error:
-            print(mariadb.Error)
+        except mariadb.Error as error:
+            print(error)
 
         cursor.close()
 
-    def update_server_table(self, serverID, prefix):
-        pass
+    def get_server_prefix(self, serverID):
+        self.confirm_tables_exist()
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("""SELECT prefix FROM server_settings WHERE server_id = %s""", (serverID,))
+            prefix = cursor.fetchone()
+            if prefix:
+                for val in prefix:
+                    guildPrefix = val
+                return guildPrefix
+            else:
+                self.make_server(serverID)
+        except mariadb.Error as error:
+            print(error)
+            return None
+        cursor.close()
 
-    def get_user(self, userID):
+    def check_guild_exists(self, serverID):
+        self.confirm_tables_exist()
+        cursor = self.connection.cursor()
+        cursor.execute("""SELECT * FROM server_settings WHERE server_id = %s""", (serverID,))
+        existance = cursor.fetchone()
+        if existance:
+            return True
+        else:
+            return False
+
+
+    def make_server(self, serverID):
+        self.confirm_tables_exist()
+        cursor = self.connection.cursor()
+
+        try:
+            cursor.execute("""INSERT INTO server_settings (server_id) VALUES (%s)""", (serverID,))
+            self.connection.commit()
+        except mariadb.Error as error:
+            print("Guild insertion error: {}".format(error))
+
+        cursor.close()
+
+    def update_server_prefix(self, serverID, prefix):
+        self.confirm_tables_exist()
+        cursor = self.connection.cursor()
+
+        try:
+            cursor.execute("""UPDATE LOW_PRIORITY server_settings SET prefix = %s
+            WHERE server_id = %s""", (prefix, serverID))
+
+            self.connection.commit()
+            cursor.close()
+            return True
+        except mariadb.Error as error:
+            print(error)
+            cursor.close()
+            return error
+
+    def get_user_settings(self, userID):
+        userConfig = []
+        append = userConfig.append()
         self.confirm_tables_exist()
         cursor = self.connection.cursor()
         cursor.execute("""SELECT * FROM user_settings WHERE user_id=%s""", (userID,))
-        user = cursor.fetchone()
+        for value in cursor.fetchone():
+            append(value)
         cursor.close()
-        return user
+        return userConfig
 
     def make_user(self, userID):
         self.confirm_tables_exist()
@@ -99,7 +155,6 @@ class mariadb_funcs(Plugin):
             try:
                 cursor.execute("""INSERT INTO user_settings (user_id) VALUES (%s)""", (userID,))
                 self.connection.commit()
-                print("new user added: {}".format(userID))
             except mariadb.Error as error:
                 print("New user insert error: {}".format(error))
 
@@ -110,8 +165,7 @@ class mariadb_funcs(Plugin):
         return row
 
     def update_user_setting(self, userID, option, content):
-        row = self.make_user(userID)
-        print(row)
+        self.make_user(userID)
         cursor = self.connection.cursor()
 
         try:
