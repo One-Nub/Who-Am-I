@@ -80,6 +80,7 @@ class Main(Plugin):
             self.on_blurb_setting(event)
             self.on_timezone_setting(event)
             self.on_facts_setting(event)
+            event.msg.reply("Setup complete, your profile has been made/updated!")
         elif confirmation == "no":
             event.msg.reply("**Setup cancelled.**")
 
