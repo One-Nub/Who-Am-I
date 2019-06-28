@@ -2,13 +2,56 @@ from disco.bot import Plugin
 from disco.types.message import MessageEmbed
 from datetime import datetime
 from disco.util.chains import Chainable
+import re
+import random
 
 class Main(Plugin):
     @Plugin.command("profile", aliases = ["whois"], parser = True)
     @Plugin.add_argument("userID", type = str, nargs = "?")
-    def on_profile_command(self, event):
-        """(wip) Displays your profile for the world to see!"""
-        print("wip")
+    def on_profile_command(self, event, args):
+        """Displays your profile for the world to see!"""
+        mariadb = self.bot.plugins.get("mariadb_funcs")
+        if args.userID:
+            user = args.userID
+            user = re.sub("[<@!>]", '', user)
+        else:
+            user = event.msg.author.id
+        if mariadb.check_user_exists(user):
+            usrSettings = mariadb.get_user_settings(user)
+            userID = usrSettings[0]
+            userObj = self.state.users.get(userID)
+            userPFPLink = userObj.get_avatar_url()
+            userGoBy = usrSettings[1]
+            userDesc = usrSettings[2]
+            userTimezone = usrSettings[3]
+            userIntFacts = usrSettings[4]
+
+            profileEmbed = MessageEmbed()
+            profileEmbed.title = "The **amazing** profile of {0}#{1}!".format(userObj.username, userObj.discriminator)
+            profileEmbed.set_thumbnail(url = userPFPLink)
+
+            color = random.randint(0, 0xFFFFFF)
+            profileEmbed.color = color
+
+            if userDesc == None:
+                profileEmbed.description = """This user hasn't set a description!
+                Please run `@Who Am I#1225 adjustprofile blurb`"""
+            else:
+                profileEmbed.description = userDesc
+
+            if userGoBy != None:
+                profileEmbed.add_field(name = "Howdy! Call me...", value = "```{}```".format(userGoBy), inline = True)
+
+            if userTimezone != None:
+                profileEmbed.add_field(name = "My timezone is...", value = "```{}```".format(userTimezone), inline = True)
+
+            if userIntFacts != None:
+                profileEmbed.add_field(name = "Here is an interesting fact about me!", value = "```{}```".format(userIntFacts), inline = True)
+
+            event.msg.reply(embed = profileEmbed)
+
+        else:
+            event.msg.reply("This user does not have a profile! Maybe they should make one by changing their settings :eyes:")
 
 
     @Plugin.command("adjustprofile", parser = True)
