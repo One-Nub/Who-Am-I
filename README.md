@@ -25,7 +25,7 @@ sudo pip3 install -r requirements.txt
 
 #OR RUN
 
-sudo pip3 install disco-py==0.0.12
+sudo pip3 install disco-py==0.0.13rc2
 sudo pip3 install mysql-connector-python~=8.0.16  
 ```
 
