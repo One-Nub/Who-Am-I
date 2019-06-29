@@ -116,7 +116,7 @@ class Main(Plugin):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         MariaDB = self.bot.plugins.get("mariadb_funcs")
 
-        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60, fieldName = "call me")
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 60, fieldName = "go by name")
         if response != "cancel":
             changeSetting = MariaDB.update_user_setting(event.author.id, 'call_me', response)
             if changeSetting == True:
