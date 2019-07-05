@@ -83,6 +83,8 @@ class Main(Plugin):
             event.msg.reply("Setup complete, your profile has been made/updated!")
         elif confirmation == "no":
             event.msg.reply("**Setup cancelled.**")
+        else:
+            event.msg.reply("That wasn't an option... Prompt cancelled, try again.")
 
     @Plugin.command("adjustprofile", parser = True)
     @Plugin.add_argument("setting", type = str.lower, choices = ["callme", "blurb",
@@ -111,6 +113,8 @@ class Main(Plugin):
             self.on_timezone_setting(event)
         elif args.setting == ("facts"):
             self.on_facts_setting(event)
+        else:
+            event.msg.reply("That wasn't an option... Prompt cancelled. Try again")
 
     def on_callme_setting(self, event):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
