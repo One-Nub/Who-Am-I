@@ -83,7 +83,8 @@ class mariadb_funcs(Plugin):
         self.confirm_tables_exist()
         cursor = self.connection.cursor()
         try:
-            cursor.execute("""SELECT prefix FROM server_settings WHERE server_id = %s""", (serverID,))
+            cursor.execute("""SELECT prefix FROM server_settings WHERE server_id = %s""",
+            (serverID,))
             prefix = cursor.fetchone()
             if prefix:
                 for val in prefix:

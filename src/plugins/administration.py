@@ -19,7 +19,8 @@ class Administration(Plugin):
                 else:
                     event.msg.reply("Error: ```{}```".format(args.prefix))
             else:
-                prefix = PrefixHandler.prompt_for_arg(event, timeLimit = 30, fieldName = "server prefix")
+                prefix = PrefixHandler.prompt_for_arg(event, timeLimit = 30,
+                         fieldName = "server prefix")
                 if prefix != "cancel":
                     tryUpdate = mariadb.update_server_prefix(event.guild.id, args.prefix)
                     if tryUpdate == True:

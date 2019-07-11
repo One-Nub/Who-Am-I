@@ -128,26 +128,30 @@ class PrefixHandler(Plugin):
         if choices:
             argsEmbed = MessageEmbed()
             argsEmbed.title = "Choices, choices..."
-            argsEmbed.description = "**Please response with one of these options!**\n\n{}".format(choices)
-            argsEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(timeLimit))
+            argsEmbed.description = "**Please response with one of these options!**\n\n{}".format(
+                choices)
+            argsEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(
+                timeLimit))
             argsEmbed.color = 0x8DD0E1
             botprompt = event.msg.reply(embed = argsEmbed)
         else:
             promptEmbed = MessageEmbed()
-            promptEmbed.title = "Please input now what you want your **{}** to be!".format(fieldName)
-            promptEmbed.description = "Or say **`cancel`** if you changed your mind. (It will just cancel this option)"
+            promptEmbed.title = "Please input now what you want your **{}** to be!".format(
+                fieldName)
+            promptEmbed.description = "Or say **`cancel`** if you changed your mind.",
+            "(It will just cancel this option)"
             promptEmbed.color = 0x8DD0E1
-            promptEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(timeLimit))
+            promptEmbed.set_footer(text = "This prompt will self-cancel in {} seconds".format(
+                timeLimit))
             botprompt = event.msg.reply(embed = promptEmbed)
-                #This I can either keep generic, or customize it before the call in the other files.
 
         try:
             with gevent.Timeout(timeLimit, TimeoutError):
                 response = self.get_user_response(event)
-                Chainable.chain(botprompt, response) #I honestly can't tell if this "Chainable" thing works or not
-                    #It's supposed to run those objects in order one by one rather than in sync.
+                Chainable.chain(botprompt, response)
         except TimeoutError:
-            event.msg.reply("Timeout limit of `{0} seconds` reached, prompt cancelled.".format(timeLimit))
+            event.msg.reply("Timeout limit of `{0} seconds` reached, prompt cancelled.".format(
+                timeLimit))
             return "timeout"
 
         if choices:

@@ -33,7 +33,8 @@ class Main(Plugin):
     	        usrState = "offline"
 
             profileEmbed = MessageEmbed()
-            profileEmbed.title = "The amazing profile of {0}#{1} who is currently **{2}**!".format(userObj.username, userObj.discriminator, usrState)
+            profileEmbed.title = "The amazing profile of {0}#{1} who is currently **{2}**!".format(
+                userObj.username, userObj.discriminator, usrState)
             profileEmbed.set_thumbnail(url = userPFPLink)
 
             color = random.randint(0, 0xFFFFFF)
@@ -46,18 +47,22 @@ class Main(Plugin):
                 profileEmbed.description = userDesc
 
             if userGoBy != None:
-                profileEmbed.add_field(name = "Howdy! Call me...", value = "```{}```".format(userGoBy), inline = True)
+                profileEmbed.add_field(name = "Howdy! Call me...", value = "```{}```".format(
+                    userGoBy), inline = True)
 
             if userTimezone != None:
-                profileEmbed.add_field(name = "My timezone is...", value = "```{}```".format(userTimezone), inline = True)
+                profileEmbed.add_field(name = "My timezone is...", value = "```{}```".format(
+                    userTimezone), inline = True)
 
             if userIntFacts != None:
-                profileEmbed.add_field(name = "Here is an interesting fact about me!", value = "```{}```".format(userIntFacts), inline = True)
+                profileEmbed.add_field(name = "Here is an interesting fact about me!",
+                value = "```{}```".format(userIntFacts), inline = True)
 
             event.msg.reply(embed = profileEmbed)
 
         else:
-            event.msg.reply(":no_good: This user does not have a profile! They can make one by running `@Who Am I#1225 setup`")
+            event.msg.reply(":no_good: This user does not have a profile!",
+             "They can make one by running `@Who Am I#1225 setup`")
 
     @Plugin.command("setup")
     def on_setup_commmand(self, event):
@@ -72,7 +77,9 @@ class Main(Plugin):
         promptSetup.color = 0x8DD0E1
 
         event.msg.reply(embed = promptSetup)
-        confirmation = PrefixHandler.prompt_for_arg(event, timeLimit = 15, choices = ("`yes` or `no`"))
+        confirmation = PrefixHandler.prompt_for_arg(event,
+                       timeLimit = 15, choices = ("`yes` or `no`"))
+
         if confirmation == "yes":
             event.msg.reply("Starting setup now...")
             gevent.sleep(3)
@@ -132,7 +139,8 @@ class Main(Plugin):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         MariaDB = self.bot.plugins.get("mariadb_funcs")
 
-        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200, fieldName = "blurb/description")
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200,
+                    fieldName = "blurb/description")
         if response != "cancel":
             changeSetting = MariaDB.update_user_setting(event.author.id, 'usr_desc', response)
             if changeSetting == True:
@@ -156,7 +164,8 @@ class Main(Plugin):
         PrefixHandler = self.bot.plugins.get("PrefixHandler")
         MariaDB = self.bot.plugins.get("mariadb_funcs")
 
-        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200, fieldName = "interesting facts")
+        response = PrefixHandler.prompt_for_arg(event, timeLimit = 200,
+                    fieldName = "interesting facts")
         if response != "cancel":
             changeSetting = MariaDB.update_user_setting(event.author.id, 'facts', response)
             if changeSetting == True:
