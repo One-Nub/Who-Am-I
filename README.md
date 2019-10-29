@@ -13,7 +13,7 @@ All configuration values will be found in [config.json](https://github.com/One-N
 
 The MariaDB user requires CREATE, INSERT, SELECT, and UPDATE.
 
-Run it with main.py in /src
+Run it with main.py in /src (but this only works when you are not planning on using a virtual environment)
 
 ## Requirements
 
@@ -21,12 +21,11 @@ This requires [Python 3.6](https://www.python.org/downloads/release/python-368/)
 The MariaDB user requires CREATE, INSERT, SELECT, and UPDATE.
 
 ```bash
-sudo pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 
 #OR RUN
-
-sudo pip3 install disco-py==0.0.13rc2
-sudo pip3 install mysql-connector-python~=8.0.16  
+pip3 install disco-py==0.0.13rc2
+pip3 install mysql-connector-python~=8.0.16  
 ```
 
 ## Post Hackweek Ideas
