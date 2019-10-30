@@ -4,11 +4,12 @@
         "commands_prefix" : "Ra@n60M5tR1nG",
         "commands_require_mention" : false,
         "plugins": [
-            "plugins.essentials",
-            "plugins.util",
+            "plugins.init",
+            "plugins.common_cmds",
             "plugins.main_cmds",
             "plugins.administration",
-            "db"
+            "handler",
+            "db_controller"
         ]
     },
     "db_creds" : {
