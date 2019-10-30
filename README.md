@@ -9,22 +9,24 @@ The default prefix is `wai!` or you can mention the bot.
 
 ## Installation
 
-All configuration values will be found in [config.json](https://github.com/One-Nub/Who-Am-I/blob/master/src/config.json) allowing the self hoster (you!) to just configure those values & away you go.
+All configuration values will be found in [config.json](https://github.com/One-Nub/Who-Am-I/blob/master/src/config.json) allowing the self hoster (you!) to just configure those values & away you go. (Although my name and github links will still be hidden in places :eyes:)
 
 The MariaDB user requires CREATE, INSERT, SELECT, and UPDATE.
 
 Run it with main.py in /src (but this only works when you are not planning on using a virtual environment)
+Run the bot with `python -m disco-cli --config config.json` from the `/src` directory. 
+`/src/main.py` can be used as well but this will not work if a virtual environment is set - or if python is not named python3.6.
 
 ## Requirements
 
-This requires [Python 3.6](https://www.python.org/downloads/release/python-368/) to be able to run as well as a [MariaDB](https://mariadb.org/) database.
-The MariaDB user requires CREATE, INSERT, SELECT, and UPDATE.
+This requires at least [Python3.6+](https://www.python.org/downloads/) to be able to run as well as a [MariaDB](https://mariadb.org/) database.
+The MariaDB user requires CREATE, INSERT, SELECT, and UPDATE permissions.
 
 ```bash
 pip3 install -r requirements.txt
 
 #OR RUN
-pip3 install disco-py==0.0.13rc2
+pip3 install git+git://github.com/b1naryth1ef/disco#egg=disco-py
 pip3 install mysql-connector-python~=8.0.16  
 ```
 
