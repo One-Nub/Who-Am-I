@@ -13,7 +13,6 @@ All configuration values will be found in [config.json](https://github.com/One-N
 
 The MariaDB user requires CREATE, INSERT, SELECT, and UPDATE.
 
-Run it with main.py in /src (but this only works when you are not planning on using a virtual environment)
 Run the bot with `python -m disco-cli --config config.json` from the `/src` directory. 
 `/src/main.py` can be used as well but this will not work if a virtual environment is set - or if python is not named python3.6.
 
