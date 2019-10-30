@@ -1,6 +1,7 @@
 from disco.bot import Plugin
 from disco.types.message import MessageEmbed
 from datetime import datetime
+from time import time
 
 class Utilities(Plugin):
     @Plugin.command("help")
@@ -77,5 +78,9 @@ class Utilities(Plugin):
 
     @Plugin.command("ping", aliases = ["pong"])
     def on_ping_command(self, event):
-        """Responds with 'Pong!' if the bot is online"""
-        event.msg.reply("Pong!")
+        """Responds with the latency between message recieve and response time."""
+        recieveTime = time()
+        message = event.msg.reply("Pinging...")
+        finalTime = time() - recieveTime
+        finalTime = int(finalTime * 1000)
+        message.edit("Pong! `{} ms`".format(finalTime))
