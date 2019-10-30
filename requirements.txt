@@ -1,2 +1,2 @@
-disco-py==0.0.13rc2
+git+git://github.com/b1naryth1ef/disco#egg=disco-py
 mysql-connector-python~=8.0.16
